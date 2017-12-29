@@ -2,6 +2,7 @@ package me.echodev.resizer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
 
 import java.io.File;
@@ -17,13 +18,15 @@ import me.echodev.resizer.util.ImageUtils;
  */
 
 public class Resizer {
+    private final Context context;
     private int targetLength, quality;
     private Bitmap.CompressFormat compressFormat;
     private String outputDirPath;
     private String outputFilename;
-    private File sourceImage;
+    private BitmapSource source;
 
     public Resizer(Context context) {
+        this.context = context;
         targetLength = 1080;
         quality = 80;
         compressFormat = Bitmap.CompressFormat.JPEG;
@@ -90,18 +93,23 @@ public class Resizer {
         return this;
     }
 
+    public Resizer setSourceImage(Uri uri) {
+        this.source = new UriBitmapSource(context, uri);
+        return this;
+    }
+
     public Resizer setSourceImage(File sourceImage) {
-        this.sourceImage = sourceImage;
+        this.source = new FileBitmapSource(sourceImage);
         return this;
     }
 
     public File getResizedFile() throws IOException {
         return ImageUtils.getScaledImage(targetLength, quality, compressFormat, outputDirPath, outputFilename,
-                sourceImage);
+                source);
     }
 
     public Bitmap getResizedBitmap() throws IOException {
-        return ImageUtils.getScaledBitmap(targetLength, sourceImage);
+        return ImageUtils.getScaledBitmap(targetLength, source);
     }
 
     public Flowable<File> getResizedFileAsFlowable() {
