@@ -6,31 +6,35 @@ import android.graphics.BitmapFactory;
 import java.io.File;
 import java.io.IOException;
 
+import me.echodev.resizer.BitmapSource;
+
 /**
  * Created by K.K. Ho on 3/9/2017.
  */
 
 public class ImageUtils {
-    public static File getScaledImage(int targetLength, int quality, Bitmap.CompressFormat compressFormat, String outputDirPath, File sourceImage) throws IOException {
+    public static File getScaledImage(int targetLength, int quality, Bitmap.CompressFormat compressFormat,
+            String outputDirPath, String outputFilename, BitmapSource bitmapSource) throws IOException {
         File directory = new File(outputDirPath);
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
         // Prepare the new file name and path
-        String outputFilePath = FileUtils.getOutputFilePath(compressFormat, outputDirPath, sourceImage);
+        String outputFilePath = FileUtils.getOutputFilePath(compressFormat, outputDirPath, outputFilename);
 
         // Write the resized image to the new file
-        Bitmap scaledBitmap = getScaledBitmap(targetLength, sourceImage);
+        Bitmap scaledBitmap = getScaledBitmap(targetLength, bitmapSource);
         FileUtils.writeBitmapToFile(scaledBitmap, compressFormat, quality, outputFilePath);
 
         return new File(outputFilePath);
     }
 
-    public static Bitmap getScaledBitmap(int targetLength, File sourceImage) {
+    public static Bitmap getScaledBitmap(int targetLength, BitmapSource bitmapSource) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
-        Bitmap bitmap = BitmapFactory.decodeFile(sourceImage.getAbsolutePath(), options);
+
+        Bitmap bitmap = bitmapSource.loadBitmap(options);
 
         // Get the dimensions of the original bitmap
         int originalWidth = options.outWidth;
