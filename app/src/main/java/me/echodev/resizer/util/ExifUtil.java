@@ -17,7 +17,6 @@ class ExifUtil {
     static Bitmap rotateBitmap(Context context, BitmapSource src, Bitmap bitmap) {
         try {
 
-
             int orientation = getExifOrientation(context, src);
             
             if (orientation == 1) {
@@ -26,28 +25,28 @@ class ExifUtil {
             
             Matrix matrix = new Matrix();
             switch (orientation) {
-            case 2:
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
                 matrix.setScale(-1, 1);
                 break;
-            case 3:
+            case ExifInterface.ORIENTATION_ROTATE_180:
                 matrix.setRotate(180);
                 break;
-            case 4:
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
                 matrix.setRotate(180);
                 matrix.postScale(-1, 1);
                 break;
-            case 5:
+            case ExifInterface.ORIENTATION_TRANSPOSE:
                 matrix.setRotate(90);
                 matrix.postScale(-1, 1);
                 break;
-            case 6:
+            case ExifInterface.ORIENTATION_ROTATE_90:
                 matrix.setRotate(90);
                 break;
-            case 7:
+            case ExifInterface.ORIENTATION_TRANSVERSE:
                 matrix.setRotate(-90);
                 matrix.postScale(-1, 1);
                 break;
-            case 8:
+            case ExifInterface.ORIENTATION_ROTATE_270:
                 matrix.setRotate(-90);
                 break;
             default:
@@ -59,11 +58,11 @@ class ExifUtil {
                 bitmap.recycle();
                 return oriented;
             } catch (OutOfMemoryError e) {
-                e.printStackTrace();
+                Log.w("ExifUtil", "cannot perform rotation", e);
                 return bitmap;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.w("ExifUtil", "error", e);
         } 
         
         return bitmap;
