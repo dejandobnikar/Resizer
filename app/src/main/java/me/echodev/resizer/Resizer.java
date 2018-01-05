@@ -104,7 +104,7 @@ public class Resizer {
     }
 
     public File getResizedFile() throws IOException {
-        return ImageUtils.getScaledImage(targetLength, quality, compressFormat, outputDirPath, outputFilename,
+        return ImageUtils.getScaledImage(context, targetLength, quality, compressFormat, outputDirPath, outputFilename,
                 source);
     }
 

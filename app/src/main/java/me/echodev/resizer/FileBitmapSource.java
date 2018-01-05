@@ -2,6 +2,7 @@ package me.echodev.resizer;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 
 import java.io.File;
 
@@ -15,6 +16,10 @@ class FileBitmapSource implements BitmapSource {
 
     FileBitmapSource(File image) {
         this.image = image;
+    }
+
+    @Override public Uri getUri() {
+        return Uri.fromFile(image);
     }
 
     @Override public Bitmap loadBitmap(BitmapFactory.Options options) {
