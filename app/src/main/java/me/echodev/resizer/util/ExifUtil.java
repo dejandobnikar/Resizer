@@ -81,20 +81,10 @@ class ExifUtil {
             }
 
             ExifInterface exifInterface = new ExifInterface(in);
-            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    return  90;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    return  180;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    return  270;
-                default:
-                    return 0;
-            }
+            return exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
         } catch (IOException e) {
             Log.w("ExifUtil", "cannot read exif", e);
-            return 0;
+            return 1;
         } finally {
             if (in != null) {
                 try {
