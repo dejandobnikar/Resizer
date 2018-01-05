@@ -1,5 +1,6 @@
 package me.echodev.resizer.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -13,7 +14,7 @@ import me.echodev.resizer.BitmapSource;
  */
 
 public class ImageUtils {
-    public static File getScaledImage(int targetLength, int quality, Bitmap.CompressFormat compressFormat,
+    public static File getScaledImage(Context context, int targetLength, int quality, Bitmap.CompressFormat compressFormat,
             String outputDirPath, String outputFilename, BitmapSource bitmapSource) throws IOException {
         File directory = new File(outputDirPath);
         if (!directory.exists()) {
@@ -25,7 +26,8 @@ public class ImageUtils {
 
         // Write the resized image to the new file
         Bitmap scaledBitmap = getScaledBitmap(targetLength, bitmapSource);
-        FileUtils.writeBitmapToFile(scaledBitmap, compressFormat, quality, outputFilePath);
+        Bitmap rotatedBitmap = ExifUtil.rotateBitmap(context, bitmapSource, scaledBitmap);
+        FileUtils.writeBitmapToFile(rotatedBitmap, compressFormat, quality, outputFilePath);
 
         return new File(outputFilePath);
     }

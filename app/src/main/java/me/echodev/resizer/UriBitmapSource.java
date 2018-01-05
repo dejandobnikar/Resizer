@@ -22,6 +22,10 @@ class UriBitmapSource implements BitmapSource {
         this.uri = uri;
     }
 
+    @Override public Uri getUri() {
+        return uri;
+    }
+
     @Override public Bitmap loadBitmap(BitmapFactory.Options options) {
         try {
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
